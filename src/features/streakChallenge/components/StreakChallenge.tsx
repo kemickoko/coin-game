@@ -3,7 +3,7 @@ import { useStreakChallenge } from '@/features/streakChallenge/hooks/useStreakCh
 import { checkAnswer } from '@/utils/checkAnswer';
 import { CoinArea } from '@/components/CoinArea';
 import { COIN_TYPES } from '@/constants/coins';
-import type { Difficulty } from '@/constants/coins';
+import type { Difficulty } from '@/components/DifficultySelector';
 
 type Props = {
   difficulty: Difficulty;
