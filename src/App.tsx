@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { COIN_TYPES, DIFFICULTY_LEVELS } from './constants/coins';
+import { COIN_TYPES, DIFFICULTY_RANGES } from './constants/coins';
 import { generateCoins } from './utils/generateCoins';
 import { checkAnswer } from './utils/checkAnswer';
 import { CoinArea } from './components/CoinArea';
 import { DifficultySelector } from './components/DifficultySelector';
+import { randomInt } from './utils/randomInt';
 import { AnswerInput } from './components/AnswerInput';
 import { ResultMessage } from './components/ResultMessage';
 import type { Difficulty, Coin } from './constants/coins';
@@ -15,17 +16,18 @@ export const App: React.FC = () => {
   const [difficulty, setDifficulty] = useState<Difficulty>('normal');
   const [mistakeCount, setMistakeCount] = useState(0);
 
-  const regenerateCoins = React.useCallback(() => {
-    const count = DIFFICULTY_LEVELS[difficulty];
+  const regenerateCoins = () => {
+    const [min, max] = DIFFICULTY_RANGES[difficulty];
+    const count = randomInt(min, max);
     setCoins(generateCoins(count));
     setInput('');
     setResult(null);
     setMistakeCount(0);
-  }, [difficulty]);
+  };
 
   useEffect(() => {
     regenerateCoins();
-  }, [regenerateCoins]);
+  }, [difficulty]);
 
   const total = coins.reduce((acc, c) => acc + COIN_TYPES[c.type].value, 0);
 

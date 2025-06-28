@@ -1,5 +1,5 @@
 import React from 'react';
-import { DIFFICULTY_LEVELS } from '../constants/coins';
+import { DIFFICULTY_RANGES } from '../constants/coins';
 import type { Difficulty } from '../constants/coins';
 
 type Props = {
@@ -9,7 +9,7 @@ type Props = {
 
 export const DifficultySelector: React.FC<Props> = ({ difficulty, onChange }) => (
   <div className="flex justify-center gap-2 mb-4">
-    {Object.keys(DIFFICULTY_LEVELS).map((key) => (
+    {Object.keys(DIFFICULTY_RANGES).map((key) => (
       <button
         key={key}
         className={`px-3 py-1 rounded border ${
