@@ -7,9 +7,8 @@ export const ModeSelector: React.FC<ModeSelectorProps> = ({
   onSelect,
 }) => {
   return (
-    <div className="flex justify-center gap-4 mb-6 flex-wrap">
+    <div className="flex flex-col sm:flex-row justify-center gap-4 mb-6 flex-wrap">
       {options
-        .filter(({ id }) => id !== 'none')
         .map(({ id, label, color, description, icon }) => {
           const isSelected = selectedMode === id;
           return (

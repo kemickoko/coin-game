@@ -4,7 +4,7 @@ import { MODE_CONFIG, type ChallengeMode } from '@/components/ModeSelector';
 
 type Props = {
   difficulty: Difficulty;
-  mode: ChallengeMode;
+  mode?: ChallengeMode;
   onDifficultyChange: (d: Difficulty) => void;
   onModeChange: (m: ChallengeMode) => void;
   onStart: () => void;
@@ -28,10 +28,10 @@ export const Home: React.FC<Props> = ({
       <ModeSelector options={MODE_CONFIG} selectedMode={mode} onSelect={onModeChange} />
 
       <button
-        disabled={mode === 'none'}
+        disabled={!mode}
         onClick={onStart}
         className={`px-4 py-2 rounded text-white ${
-          mode === 'none' ? 'bg-gray-400 cursor-not-allowed' : 'bg-blue-600 hover:bg-blue-700'
+          !mode ? 'bg-gray-400 cursor-not-allowed' : 'bg-blue-600 hover:bg-blue-700'
         }`}
       >
         スタート！

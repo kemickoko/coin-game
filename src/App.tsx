@@ -9,18 +9,17 @@ import { type ChallengeMode } from '@/components/ModeSelector';
 
 export const App = () => {
   const [difficulty, setDifficulty] = useState<Difficulty>('normal');
-  const [mode, setMode] = useState<ChallengeMode>('normal');
+  const [mode, setMode] = useState<ChallengeMode | undefined>(undefined);
   const [started, setStarted] = useState(false);
 
   const handleStart = () => {
-      if (mode !== 'none') {
+      if (mode) {
         setStarted(true);
       }
     };
 
     const handleBackToHome = () => {
       setStarted(false);
-      setMode('normal'); // 必要に応じてリセット
     };
 
     if (!started) {
