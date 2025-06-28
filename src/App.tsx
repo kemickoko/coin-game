@@ -35,18 +35,20 @@ export const App = () => {
     }
 
   return (
-    <div className="max-w-xl mx-auto p-4 text-center">
+    <div className="min-h-screen max-w-xl mx-auto p-4 text-center flex flex-col">
       <button
         onClick={handleBackToHome}
-        className="mb-4 px-3 py-1 rounded border bg-gray-200 hover:bg-gray-300"
+        className="mb-4 px-3 py-1 rounded border bg-gray-200 hover:bg-gray-300 self-start"
       >
         ← モード選択に戻る
       </button>
 
       {/* モードごとの表示切り替え */}
-      {mode === 'normal' && <NormalMode difficulty={difficulty} />}
-      {mode === 'timer' && <TimerChallenge difficulty={difficulty} />}
-      {mode === 'streak' && <StreakChallenge difficulty={difficulty} />}
+      <div className="flex-grow">
+        {mode === 'normal' && <NormalMode difficulty={difficulty} />}
+        {mode === 'timer' && <TimerChallenge difficulty={difficulty} />}
+        {mode === 'streak' && <StreakChallenge difficulty={difficulty} />}
+      </div>
     </div>
   );
 };
