@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
-import { COIN_TYPES, DIFFICULTY_RANGES, type Difficulty } from '@/constants/coins';
+import { COIN_TYPES } from '@/constants/coins';
+import { DifficultyConfig, type Difficulty } from '@/components/DifficultySelector';
 import { generateCoins } from '@/utils/generateCoins';
 import { checkAnswer } from '@/utils/checkAnswer';
 import { CoinArea } from '@/components/CoinArea';
@@ -11,7 +12,7 @@ type Props = {
 
 export const NormalMode = ({ difficulty }: Props) => {
   const [coins, setCoins] = useState(() => {
-    const [min, max] = DIFFICULTY_RANGES[difficulty];
+    const [min, max] = DifficultyConfig[difficulty].range;
     return generateCoins(randomInt(min, max));
   });
   const [input, setInput] = useState('');
@@ -21,7 +22,7 @@ export const NormalMode = ({ difficulty }: Props) => {
   const total = coins.reduce((sum, coin) => sum + COIN_TYPES[coin.type].value, 0);
 
   const regenerateCoins = () => {
-    const [min, max] = DIFFICULTY_RANGES[difficulty];
+    const [min, max] = DifficultyConfig[difficulty].range;
     setCoins(generateCoins(randomInt(min, max)));
     setInput('');
     setResult(null);
