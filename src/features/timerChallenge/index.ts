@@ -1,0 +1,1 @@
+export { TimerChallenge } from './components/TimerChallenge';
