@@ -16,6 +16,7 @@ export const StreakChallenge = ({ difficulty }: Props) => {
     maxStreak,
     reset,
     incrementStreak,
+    streakHistory,
   } = useStreakChallenge(difficulty);
 
   const total = coins.reduce((sum, coin) => sum + COIN_TYPES[coin.type].value, 0);
@@ -34,14 +35,8 @@ export const StreakChallenge = ({ difficulty }: Props) => {
         setMistakeCount(0);
         break;
       case 'wrong':
-        if (typeof res.newMistakeCount === 'number') {
-          setMistakeCount(res.newMistakeCount);
-        }
-        setInput('');
-        break;
-      case 'maxAttempts':
-        reset();
         setResult(`不正解！連続正解は ${streak} 回で終了です`);
+        reset();
         setInput('');
         setMistakeCount(0);
         break;
@@ -85,8 +80,20 @@ export const StreakChallenge = ({ difficulty }: Props) => {
       >
         リセット
       </button>
-
       {result && <p className="mt-2 font-semibold">{result}</p>}
+
+      {streakHistory.length > 0 && (
+        <div className="mt-6 text-left max-w-sm mx-auto">
+          <h3 className="font-semibold mb-2">過去の連続正解記録</h3>
+          <ul className="list-disc list-inside text-sm text-gray-700 max-h-48 overflow-auto">
+            {streakHistory.map((count, i) => (
+              <li key={i}>
+                {i + 1} 回目: {count} 回連続正解
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
     </div>
   );
 };
