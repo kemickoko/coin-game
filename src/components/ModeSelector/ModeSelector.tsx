@@ -1,5 +1,6 @@
 import React from 'react';
 import type { ModeSelectorProps } from '@/components/ModeSelector/modeConfig';
+import { selectedClassMap, unselectedClassMap } from '@/styles/colorClasses';
 
 export const ModeSelector: React.FC<ModeSelectorProps> = ({
   options,
@@ -15,10 +16,8 @@ export const ModeSelector: React.FC<ModeSelectorProps> = ({
             <button
               key={id}
               onClick={() => onSelect(id)}
-              className={`flex flex-col items-center p-4 rounded-lg border
-                transition
-                ${isSelected ? `bg-${color}-600 text-white` : `bg-white text-${color}-600 hover:bg-${color}-100`}
-                focus:outline-none focus:ring-2 focus:ring-${color}-400`}
+              className={`flex flex-col items-center p-4 rounded-lg border transition focus:outline-none focus:ring-2 ${
+                isSelected ? selectedClassMap[color] : unselectedClassMap[color]}`}
               style={{ minWidth: 120 }}
               aria-pressed={isSelected}
             >

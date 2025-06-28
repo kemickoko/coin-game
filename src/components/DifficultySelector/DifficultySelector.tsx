@@ -12,7 +12,9 @@ export const DifficultySelector = ({ difficulty, onSelect }: Props) => {
         <button
           key={key}
           className={`px-3 py-1 rounded border ${
-            difficulty === key ? 'bg-blue-600 text-white' : 'bg-white text-blue-600'
+            difficulty === key
+              ? `bg-${DifficultyConfig[key].color}-600 text-white`
+              : `bg-white text-${DifficultyConfig[key].color}-600`
           }`}
           onClick={() => onSelect(key)}
         >

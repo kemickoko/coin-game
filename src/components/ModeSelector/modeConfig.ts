@@ -1,11 +1,12 @@
 import type { ReactNode } from 'react';
+import { selectedClassMap } from '@/styles/colorClasses';
 
 export type ChallengeMode = 'normal' | 'timer' | 'streak';
 
 export type ModeOption = {
   id: ChallengeMode;
   label: string;
-  color: 'green' | 'purple' | 'pink' | string;
+  color: keyof typeof selectedClassMap;
   description?: string;
   icon?: ReactNode;
 };
