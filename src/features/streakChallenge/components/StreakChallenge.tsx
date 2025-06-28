@@ -3,7 +3,7 @@ import { useStreakChallenge } from '@/features/streakChallenge/hooks/useStreakCh
 import { checkAnswer } from '@/utils/checkAnswer';
 import { CoinArea } from '@/components/CoinArea';
 import { COIN_TYPES } from '@/constants/coins';
-import type { Difficulty } from '@/components/DifficultySelector';
+import { type Difficulty, DifficultyConfig } from '@/components/DifficultySelector';
 
 type Props = {
   difficulty: Difficulty;
@@ -47,7 +47,7 @@ export const StreakChallenge = ({ difficulty }: Props) => {
     <div className="text-center mt-8">
       <h2 className="text-xl font-bold mb-2">連続正解チャレンジ</h2>
       <p className="mb-1">現在の連続正解数: {streak}</p>
-      <p className="mb-4">過去の最高記録: {maxStreak}</p>
+      <p className="mb-4">🏆 "{DifficultyConfig[difficulty].label}" の最高記録: {maxStreak} 問</p>
 
       <CoinArea coins={coins} />
 

@@ -3,7 +3,7 @@ import { useTimerChallenge } from '@/features/timerChallenge/hooks/useTimerChall
 import { checkAnswer } from '@/utils/checkAnswer';
 import { CoinArea } from '@/components/CoinArea';
 import { COIN_TYPES } from '@/constants/coins';
-import type { Difficulty } from '@/components/DifficultySelector';
+import { type Difficulty, DifficultyConfig } from '@/components/DifficultySelector';
 
 type Props = {
   difficulty: Difficulty;
@@ -14,6 +14,8 @@ export const TimerChallenge = ({ difficulty }: Props) => {
     isPlaying,
     timeLeft,
     correctCount,
+    highScore,
+    timerHistory,
     coins,
     regenerateCoins,
     start,
@@ -65,6 +67,7 @@ export const TimerChallenge = ({ difficulty }: Props) => {
         <>
           <p className="text-lg font-medium mb-2">残り時間: {timeLeft} 秒</p>
           <p className="mb-2">正解数: {correctCount} 問</p>
+          <p className="mb-4">🏆 "{DifficultyConfig[difficulty].label}" の最高記録: {highScore} 問</p>
 
           <CoinArea coins={coins} />
 
@@ -99,6 +102,19 @@ export const TimerChallenge = ({ difficulty }: Props) => {
           </button>
 
           {result && <p className="mt-2 font-semibold">{result}</p>}
+
+          {timerHistory.length > 0 && (
+            <div className="mt-6 text-left max-w-sm mx-auto">
+              <h3 className="font-semibold mb-2">過去の正解数記録</h3>
+              <ul className="list-disc list-inside text-sm text-gray-700 max-h-48 overflow-auto">
+                {timerHistory.map((count, i) => (
+                  <li key={i}>
+                    {i + 1} 回目: {count} 問正解
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
         </>
       )}
     </div>

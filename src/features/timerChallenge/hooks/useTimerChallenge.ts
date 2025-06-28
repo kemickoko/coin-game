@@ -3,20 +3,48 @@ import { randomInt } from '@/utils/randomInt';
 import { generateCoins } from '@/utils/generateCoins';
 import { type Difficulty, DifficultyConfig } from '@/components/DifficultySelector';
 
+
 export const useTimerChallenge = (difficulty: Difficulty) => {
+  const TIMERHIGHSCORE_KEY = `timerChallengeHighScore-${difficulty}`;
+  const TIMERHISTORY_KEY = `timerChallengeHistory-${difficulty}`;
   const [isPlaying, setIsPlaying] = useState(false);
   const [timeLeft, setTimeLeft] = useState(180);
   const [correctCount, setCorrectCount] = useState(0);
+  const [highScore, setHighScore] = useState(() => {
+    const saved = localStorage.getItem(TIMERHIGHSCORE_KEY);
+    return saved ? Number(saved) : 0;
+  });
 
-  const regenerateCoins = () => {
-    const [min, max] = DifficultyConfig[difficulty].range;
-    setCoins(generateCoins(randomInt(min, max)));
-  };
+  const [timerHistory, setTimerHistory] = useState<number[]>(() => {
+    const saved = localStorage.getItem(TIMERHISTORY_KEY);
+    if (saved) {
+      try {
+        const parsed = JSON.parse(saved);
+        return Array.isArray(parsed) ? parsed : [];
+      } catch {
+        return [];
+      }
+    }
+    return [];
+  });
+
+  useEffect(() => {
+    localStorage.setItem(TIMERHISTORY_KEY, JSON.stringify(timerHistory));
+  }, [timerHistory]);
+
+  useEffect(() => {
+    localStorage.setItem(TIMERHIGHSCORE_KEY, highScore.toString());
+  }, [highScore]);
 
   const [coins, setCoins] = useState(() => {
     const [min, max] = DifficultyConfig[difficulty].range;
     return generateCoins(randomInt(min, max));
   });
+
+  const regenerateCoins = () => {
+    const [min, max] = DifficultyConfig[difficulty].range;
+    setCoins(generateCoins(randomInt(min, max)));
+  };
 
   const start = () => {
     setIsPlaying(true);
@@ -27,6 +55,13 @@ export const useTimerChallenge = (difficulty: Difficulty) => {
 
   const stop = () => {
     setIsPlaying(false);
+     if (correctCount > 0) {
+      setTimerHistory(prev => [...prev, correctCount]);
+
+      if (correctCount > highScore) {
+        setHighScore(correctCount);
+      }
+    }
   };
 
   useEffect(() => {
@@ -36,7 +71,7 @@ export const useTimerChallenge = (difficulty: Difficulty) => {
       setTimeLeft((prev) => {
         if (prev <= 1) {
           clearInterval(timer);
-          setIsPlaying(false);
+          stop();
           return 0;
         }
         return prev - 1;
@@ -50,6 +85,8 @@ export const useTimerChallenge = (difficulty: Difficulty) => {
     isPlaying,
     timeLeft,
     correctCount,
+    highScore,
+    timerHistory,
     coins,
     regenerateCoins,
     start,
