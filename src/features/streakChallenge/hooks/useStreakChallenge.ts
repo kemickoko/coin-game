@@ -1,28 +1,21 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { randomInt } from '@/utils/randomInt';
 import { generateCoins } from '@/utils/generateCoins';
 import { type Difficulty, DifficultyConfig } from '@/components/DifficultySelector';
+import { useHistoryStorage } from '@/hooks/useHistoryStorage';
 
 
 
 export const useStreakChallenge = (difficulty: Difficulty) => {
-  const STREAKMAX_KEY = `streakMax-${difficulty}`;
-  const STREAKHISTORY_KEY = `streakHistory-${difficulty}`;
-  const [streak, setStreak] = useState(0);
-  const [maxStreak, setMaxStreak] = useState(() => {
-    const stored = localStorage.getItem(STREAKMAX_KEY);
-    return stored ? Number(stored) : 0;
-  });
+  const historyKey = `streakHistory-${difficulty}`;
 
-  const [streakHistory, setStreakHistory] = useState<number[]>(() => {
-    const stored = localStorage.getItem(STREAKHISTORY_KEY);
-    try {
-      const parsed = stored ? JSON.parse(stored) : [];
-      return Array.isArray(parsed) ? parsed : [];
-    } catch {
-      return [];
-    }
-  });
+  const {
+    history: streakHistory,
+    addRecord,
+    max: maxStreak,
+  } = useHistoryStorage(historyKey);
+
+  const [streak, setStreak] = useState(0);
 
   const [coins, setCoins] = useState(() => {
     const [min, max] = DifficultyConfig[difficulty].range;
@@ -34,13 +27,9 @@ export const useStreakChallenge = (difficulty: Difficulty) => {
     setCoins(generateCoins(randomInt(min, max)));
   };
 
-  const reset = () => {
+   const reset = () => {
     if (streak > 0) {
-      setStreakHistory((prev) => {
-        const updated = [...prev, streak];
-        localStorage.setItem(STREAKHISTORY_KEY, JSON.stringify(updated));
-        return updated;
-      });
+      addRecord(streak);
     }
     setStreak(0);
     regenerateCoins();
@@ -50,16 +39,6 @@ export const useStreakChallenge = (difficulty: Difficulty) => {
     setStreak((prev) => prev + 1);
     regenerateCoins();
   };
-
-  useEffect(() => {
-    if (streak > maxStreak) {
-      setMaxStreak(streak);
-    }
-  }, [streak, maxStreak]);
-
-  useEffect(() => {
-    localStorage.setItem(STREAKMAX_KEY, String(maxStreak));
-  }, [maxStreak]);
 
   return {
     coins,
