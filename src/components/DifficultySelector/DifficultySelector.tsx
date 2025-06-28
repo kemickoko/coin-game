@@ -1,5 +1,4 @@
-import type { Difficulty } from '@/constants/coins';
-import { DifficultyConfig } from '@/components/DifficultySelector';
+import { type Difficulty, DifficultyConfig } from '@/components/DifficultySelector';
 
 type Props = {
   difficulty: Difficulty;

@@ -9,14 +9,6 @@ export const COIN_TYPES = {
 
 export const COIN_TYPES_KEYS = Object.keys(COIN_TYPES) as (keyof typeof COIN_TYPES)[];
 
-export const DIFFICULTY_RANGES = {
-  easy: [3, 7] as const,
-  normal: [10, 20] as const,
-  hard: [25, 35] as const,
-};
-
-export type Difficulty = keyof typeof DIFFICULTY_RANGES;
-
 export type Coin = {
   id: number;
   type: keyof typeof COIN_TYPES;
