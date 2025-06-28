@@ -9,7 +9,7 @@ import { type ChallengeMode } from '@/components/ModeSelector';
 
 export const App = () => {
   const [difficulty, setDifficulty] = useState<Difficulty>('normal');
-  const [mode, setMode] = useState<ChallengeMode | undefined>(undefined);
+  const [mode, setMode] = useState<ChallengeMode>('normal');
   const [started, setStarted] = useState(false);
 
   const handleStart = () => {
