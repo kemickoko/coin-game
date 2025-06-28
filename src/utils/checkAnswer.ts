@@ -7,7 +7,8 @@ export type CheckAnswerResult =
 export const checkAnswer = (
   input: string,
   total: number,
-  mistakeCount: number
+  mistakeCount: number,
+  isChallenge: boolean
 ): CheckAnswerResult => {
   const num = Number(input);
 
@@ -24,13 +25,17 @@ export const checkAnswer = (
   if (newCount >= 3) {
     return {
       type: 'maxAttempts',
-      message: `3回間違えました。正しい合計は ${total} 円です。`,
+      message: isChallenge
+        ? '不正解です。'
+        : `3回間違えました。正しい合計は ${total} 円です。`,
     };
   }
 
   return {
     type: 'wrong',
-    message: `不正解。あと${3 - newCount}回で正解が表示されます。`,
+    message: isChallenge
+      ? '不正解です。'
+      : `不正解。あと${3 - newCount}回で正解が表示されます。`,
     newMistakeCount: newCount,
   };
 };

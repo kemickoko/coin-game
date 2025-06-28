@@ -31,7 +31,7 @@ export const App: React.FC = () => {
   const total = coins.reduce((acc, c) => acc + COIN_TYPES[c.type].value, 0);
 
   const handleCheck = () => {
-    const resultObj = checkAnswer(input, total, mistakeCount);
+    const resultObj = checkAnswer(input, total, mistakeCount, isPlaying);
     setResult(resultObj.message);
 
     switch (resultObj.type) {
