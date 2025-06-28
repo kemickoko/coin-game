@@ -1,6 +1,6 @@
 import { DifficultySelector, type Difficulty } from '@/components/DifficultySelector';
 import { ModeSelector } from '@/components/ModeSelector';
-import { MODE_CONFIG, type ChallengeMode } from '@/components/ModeSelector/modeConfig';
+import { MODE_CONFIG, type ChallengeMode } from '@/components/ModeSelector';
 
 type Props = {
   difficulty: Difficulty;

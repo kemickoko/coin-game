@@ -1,8 +1,7 @@
 import { useEffect, useState } from 'react';
 import { randomInt } from '@/utils/randomInt';
 import { generateCoins } from '@/utils/generateCoins';
-import type { Difficulty } from '@/constants/coins';
-import { DIFFICULTY_RANGES } from '@/constants/coins';
+import { type Difficulty, DifficultyConfig } from '@/components/DifficultySelector';
 
 export const useTimerChallenge = (difficulty: Difficulty) => {
   const [isPlaying, setIsPlaying] = useState(false);
@@ -10,12 +9,12 @@ export const useTimerChallenge = (difficulty: Difficulty) => {
   const [correctCount, setCorrectCount] = useState(0);
 
   const regenerateCoins = () => {
-    const [min, max] = DIFFICULTY_RANGES[difficulty];
+    const [min, max] = DifficultyConfig[difficulty].range;
     setCoins(generateCoins(randomInt(min, max)));
   };
 
   const [coins, setCoins] = useState(() => {
-    const [min, max] = DIFFICULTY_RANGES[difficulty];
+    const [min, max] = DifficultyConfig[difficulty].range;
     return generateCoins(randomInt(min, max));
   });
 

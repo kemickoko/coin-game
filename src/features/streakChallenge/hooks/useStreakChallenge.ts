@@ -1,20 +1,19 @@
 import { useState } from 'react';
 import { randomInt } from '@/utils/randomInt';
 import { generateCoins } from '@/utils/generateCoins';
-import { DIFFICULTY_RANGES } from '@/constants/coins';
-import type { Difficulty } from '@/constants/coins';
+import { type Difficulty, DifficultyConfig } from '@/components/DifficultySelector';
 
 export const useStreakChallenge = (difficulty: Difficulty) => {
   const [streak, setStreak] = useState(0);
   const [maxStreak, setMaxStreak] = useState(0);
 
   const [coins, setCoins] = useState(() => {
-    const [min, max] = DIFFICULTY_RANGES[difficulty];
+    const [min, max] = DifficultyConfig[difficulty].range;
     return generateCoins(randomInt(min, max));
   });
 
   const regenerateCoins = () => {
-    const [min, max] = DIFFICULTY_RANGES[difficulty];
+    const [min, max] = DifficultyConfig[difficulty].range;
     setCoins(generateCoins(randomInt(min, max)));
   };
 
