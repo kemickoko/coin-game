@@ -1,23 +1,23 @@
 import { useEffect, useState } from 'react';
-import { DIFFICULTY_RANGES } from '../constants/coins';
-import type { Difficulty } from '../constants/coins';
-import { randomInt } from '../utils/randomInt';
-import { generateCoins } from '../utils/generateCoins';
+import { randomInt } from '@/utils/randomInt';
+import { generateCoins } from '@/utils/generateCoins';
+import type { Difficulty } from '@/constants/coins';
+import { DIFFICULTY_RANGES } from '@/constants/coins';
 
 export const useTimerChallenge = (difficulty: Difficulty) => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [timeLeft, setTimeLeft] = useState(180);
   const [correctCount, setCorrectCount] = useState(0);
 
-  const [coins, setCoins] = useState(() => {
-    const [min, max] = DIFFICULTY_RANGES[difficulty];
-    return generateCoins(randomInt(min, max));
-  });
-
   const regenerateCoins = () => {
     const [min, max] = DIFFICULTY_RANGES[difficulty];
     setCoins(generateCoins(randomInt(min, max)));
   };
+
+  const [coins, setCoins] = useState(() => {
+    const [min, max] = DIFFICULTY_RANGES[difficulty];
+    return generateCoins(randomInt(min, max));
+  });
 
   const start = () => {
     setIsPlaying(true);
@@ -47,13 +47,6 @@ export const useTimerChallenge = (difficulty: Difficulty) => {
     return () => clearInterval(timer);
   }, [isPlaying]);
 
-  const reset = () => {
-    setIsPlaying(false);
-    setTimeLeft(180);
-    setCorrectCount(0);
-    regenerateCoins();
-  };
-
   return {
     isPlaying,
     timeLeft,
@@ -62,7 +55,6 @@ export const useTimerChallenge = (difficulty: Difficulty) => {
     regenerateCoins,
     start,
     stop,
-    reset,
     incrementCorrect: () => setCorrectCount((prev) => prev + 1),
   };
 };

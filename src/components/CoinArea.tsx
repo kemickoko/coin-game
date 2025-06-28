@@ -1,4 +1,3 @@
-import React from 'react';
 import { COIN_TYPES } from '../constants/coins';
 import { CoinImage } from './CoinImage';
 import type { Coin } from '../constants/coins';
