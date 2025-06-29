@@ -1,6 +1,6 @@
-import { COIN_TYPES } from '../constants/coins';
+import { COIN_TYPES } from './constants/japaneseCoins';
 import { CoinImage } from './CoinImage';
-import type { Coin } from '../constants/coins';
+import type { Coin } from './constants/japaneseCoins';
 
 type Props = {
   coins: Coin[];

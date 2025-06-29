@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { useTimerChallenge } from '@/features/timerChallenge/hooks/useTimerChallenge';
 import { checkAnswer } from '@/utils/checkAnswer';
-import { CoinArea } from '@/components/CoinArea';
-import { COIN_TYPES } from '@/constants/coins';
+import { CoinArea } from '@/components/CoinImageGenerator/CoinArea';
+import { COIN_TYPES } from '@/components/CoinImageGenerator/constants/japaneseCoins';
 import { type Difficulty, DifficultyConfig } from '@/components/DifficultySelector';
 
 type Props = {

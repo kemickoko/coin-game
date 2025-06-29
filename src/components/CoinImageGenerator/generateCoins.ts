@@ -1,9 +1,8 @@
 import {
   COIN_TYPES_KEYS,
   getCoinSizePx,
-} from '../constants/coins';
-
-import type { Coin } from '../constants/coins';
+  type Coin
+} from '@/components/CoinImageGenerator/constants/japaneseCoins';
 
 /**
  * 指定された数の硬貨を重ならないようにランダムに生成する

@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react';
-import { COIN_TYPES } from '@/constants/coins';
+import { COIN_TYPES } from '@/components/CoinImageGenerator/constants/japaneseCoins';
 import { DifficultyConfig, type Difficulty } from '@/components/DifficultySelector';
-import { generateCoins } from '@/utils/generateCoins';
+import { generateCoins } from '@/components/CoinImageGenerator/generateCoins';
 import { checkAnswer } from '@/utils/checkAnswer';
-import { CoinArea } from '@/components/CoinArea';
+import { CoinArea } from '@/components/CoinImageGenerator/CoinArea';
 import { randomInt } from '@/utils/randomInt';
 
 type Props = {

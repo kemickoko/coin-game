@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { randomInt } from '@/utils/randomInt';
-import { generateCoins } from '@/utils/generateCoins';
+import { generateCoins } from '@/components/CoinImageGenerator/generateCoins';
 import { type Difficulty, DifficultyConfig } from '@/components/DifficultySelector';
 import { useHistoryStorage } from '@/hooks/useHistoryStorage';
 
