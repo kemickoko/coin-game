@@ -16,27 +16,41 @@ export const NormalMode = ({ difficulty, currency }: Props) => {
   const [result, setResult] = useState<string | null>(null);
   const [mistakeCount, setMistakeCount] = useState(0);
   const [coinKey, setCoinKey] = useState(0);
+  const [maxAttemptsReached, setMaxAttemptsReached] = useState(false);
 
   // 合計金額を計算
   const total = coins.reduce((sum, coin) => sum + coin.value, 0);
 
   const handleCheck = () => {
-    const res = checkAnswer(input, total, mistakeCount, true);
+    if (maxAttemptsReached) {
+      setResult(null);
+      setInput('');
+      setMaxAttemptsReached(false);
+      regenerateCoins();
+      return;
+    }
+
+    const res = checkAnswer(input, total, mistakeCount, false);
     setResult(res.message);
 
     switch (res.type) {
       case 'correct':
+        setResult(res.message);
         setMistakeCount(0);
+        setInput('');
+        regenerateCoins();
         break;
       case 'wrong':
+        setResult(res.message);
         if (typeof res.newMistakeCount === 'number') {
           setMistakeCount(res.newMistakeCount);
         }
-        setInput('');
         break;
       case 'maxAttempts':
-        setResult(`正解は ${total} 円です`);
+        setResult(res.message);
         setMistakeCount(0);
+        setInput('');
+        setMaxAttemptsReached(true);
         break;
     }
   };
