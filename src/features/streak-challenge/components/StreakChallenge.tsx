@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useStreakChallenge } from '@/features/streak-challenge/hooks/useStreakChallenge';
 import { CoinDisplay } from '@/components/coin-image-generator/CoinDisplay';
-import { AnswerInput } from '@/components/AnswerInput';
+import { AnswerInput } from '@/components/ui/AnswerInput';
 import { checkAnswer } from '@/utils/checkAnswer';
 import { useInputFocusControl } from '@/hooks/useInputFocusControl';
 import { type Coin } from '@/components/coin-image-generator/types';

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { CoinDisplay } from '@/components/coin-image-generator/CoinDisplay';
-import { AnswerInput } from '@/components/AnswerInput';
+import { AnswerInput } from '@/components/ui/AnswerInput';
 import { checkAnswer } from '@/utils/checkAnswer';
 import { type Coin } from '@/components/coin-image-generator/types';
 import { type Currency } from '@/components/coin-image-generator/constants';

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useTimerChallenge } from '@/features/timer-challenge/hooks/useTimerChallenge';
-import { AnswerInput } from '@/components/AnswerInput';
+import { AnswerInput } from '@/components/ui/AnswerInput';
 import { checkAnswer } from '@/utils/checkAnswer';
 import { CoinDisplay } from '@/components/coin-image-generator/CoinDisplay';
 import { useInputFocusControl } from '@/hooks/useInputFocusControl';
