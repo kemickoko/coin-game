@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'react';
-import { generateCoins} from './generateCoins';
-import { DifficultyConfig, type Difficulty } from '@/components/difficulty-selector';
 import { CoinImage } from './CoinImage';
-import type { Coin } from './types';
+import { type Coin } from './types';
+import { DifficultyConfig, type Difficulty } from '@/components/difficulty-selector';
 import { type Currency } from '@/components/coin-image-generator/constants';
+import { generateCoins} from './generateCoins';
+
 
 type Props = {
   difficulty: Difficulty;

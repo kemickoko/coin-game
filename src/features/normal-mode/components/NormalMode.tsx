@@ -1,9 +1,11 @@
 import { useState } from 'react';
 import { CoinDisplay } from '@/components/coin-image-generator/CoinDisplay';
-import type { Coin } from '@/components/coin-image-generator/types';
-import { type Difficulty } from '@/components/difficulty-selector';
+import { AnswerInput } from '@/components/AnswerInput';
 import { checkAnswer } from '@/utils/checkAnswer';
+import { type Coin } from '@/components/coin-image-generator/types';
 import { type Currency } from '@/components/coin-image-generator/constants';
+import { type Difficulty } from '@/components/difficulty-selector';
+
 
 type Props = {
   difficulty: Difficulty;
@@ -77,24 +79,11 @@ export const NormalMode = ({ difficulty, currency }: Props) => {
       />
 
       {/* 入力とチェック */}
-      <input
-        type="text"
-        inputMode="numeric"
-        pattern="[0-9]*"
-        className="border rounded px-3 py-2 w-full text-base sm:text-lg mb-2"
-        placeholder="合計金額を入力"
-        value={input}
-        onChange={(e) => setInput(e.target.value)}
-        onKeyDown={(e) => {
-          if (e.key === 'Enter') handleCheck();
-        }}
+      <AnswerInput
+        input={input}
+        onChange={setInput}
+        onSubmit={handleCheck}
       />
-      <button
-        onClick={handleCheck}
-        className="bg-blue-600 text-white py-2 rounded w-full hover:bg-blue-700 transition"
-      >
-        チェック
-      </button>
       <button
         onClick={regenerateCoins}
         className="bg-gray-400 text-white py-2 rounded w-full hover:bg-gray-500 transition mt-2"

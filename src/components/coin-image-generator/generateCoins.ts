@@ -1,7 +1,5 @@
-import type { Coin } from './types';
-import { currencyMap } from '@/components/coin-image-generator/constants';
-import { type Currency } from '@/components/coin-image-generator/constants';
-// 将来的に他通貨をここにimport
+import { type Coin } from './types';
+import { type Currency, currencyMap } from '@/components/coin-image-generator/constants';
 
 
 export function generateCoins(count: number, currency: Currency = 'JPY'): Coin[] {
