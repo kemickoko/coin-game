@@ -8,12 +8,13 @@ import { useHistoryStorage } from '@/hooks/useHistoryStorage';
 
 export const useStreakChallenge = (difficulty: Difficulty) => {
   const historyKey = `streakHistory-${difficulty}`;
+  const maxKey = `streakHighScore-${difficulty}`;
 
   const {
     history: streakHistory,
     addRecord,
     max: maxStreak,
-  } = useHistoryStorage(historyKey);
+  } = useHistoryStorage(historyKey, maxKey);
 
   const [streak, setStreak] = useState(0);
 

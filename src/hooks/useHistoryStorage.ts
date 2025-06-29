@@ -1,12 +1,10 @@
 import { useEffect, useState } from 'react';
 
-/**
- * 指定された key に対して、数値の履歴を localStorage で管理するカスタムフック。
- */
-export const useHistoryStorage = (key: string) => {
+export const useHistoryStorage = (historyKey: string, maxKey?: string) => {
+  // 履歴の初期値取得
   const [history, setHistory] = useState<number[]>(() => {
     try {
-      const stored = localStorage.getItem(key);
+      const stored = localStorage.getItem(historyKey);
       const parsed = stored ? JSON.parse(stored) : [];
       return Array.isArray(parsed) ? parsed : [];
     } catch {
@@ -14,23 +12,34 @@ export const useHistoryStorage = (key: string) => {
     }
   });
 
-  // localStorage に保存（変更時）
-  useEffect(() => {
-    localStorage.setItem(key, JSON.stringify(history));
-  }, [history, key]);
+  // max値の初期値取得
+  const [max, setMax] = useState(() => {
+    if (!maxKey) return 0;
+    const storedMax = localStorage.getItem(maxKey);
+    return storedMax ? Number(storedMax) : 0;
+  });
 
-  /** 履歴に新しい記録を追加 */
+  // 履歴が変わったらlocalStorageに保存
+  useEffect(() => {
+    localStorage.setItem(historyKey, JSON.stringify(history));
+  }, [history, historyKey]);
+
+  // maxが変わったらlocalStorageに保存
+  useEffect(() => {
+    if (!maxKey) return;
+    localStorage.setItem(maxKey, max.toString());
+  }, [max, maxKey]);
+
+  // 新しい記録を追加し、maxも更新
   const addRecord = (value: number) => {
     setHistory((prev) => [...prev, value]);
+    setMax((prevMax) => (value > prevMax ? value : prevMax));
   };
 
-  /** 履歴をすべてリセット */
   const clearHistory = () => {
     setHistory([]);
+    setMax(0);
   };
-
-  /** 履歴の最大値を取得（例: スコアや連続回数の最大） */
-  const max = history.length > 0 ? Math.max(...history) : 0;
 
   return {
     history,
