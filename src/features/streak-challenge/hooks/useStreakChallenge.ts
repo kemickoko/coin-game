@@ -1,9 +1,10 @@
 import { useState } from 'react';
 import { randomInt } from '@/utils/randomInt';
 import { generateCoins } from '@/components/coin-image-generator/generateCoins';
-import { type Difficulty, DifficultyConfig } from '@/components/difficulty-selector';
 import { useHistoryStorage } from '@/hooks/useHistoryStorage';
 import { type Currency } from '@/components/coin-image-generator/constants';
+import { type Difficulty, DifficultyConfig } from '@/components/difficulty-selector';
+
 
 
 export const useStreakChallenge = (difficulty: Difficulty, currencyCode: Currency) => {

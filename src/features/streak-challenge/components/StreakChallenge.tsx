@@ -1,10 +1,13 @@
 import { useState } from 'react';
 import { useStreakChallenge } from '@/features/streak-challenge/hooks/useStreakChallenge';
 import { CoinDisplay } from '@/components/coin-image-generator/CoinDisplay';
+import { AnswerInput } from '@/components/ui/AnswerInput';
+import { checkAnswer } from '@/utils/checkAnswer';
+import { useInputFocusControl } from '@/hooks/useInputFocusControl';
 import { type Coin } from '@/components/coin-image-generator/types';
 import { type Difficulty, DifficultyConfig } from '@/components/difficulty-selector';
-import { checkAnswer } from '@/utils/checkAnswer';
 import { type Currency } from '@/components/coin-image-generator/constants';
+
 
 type Props = {
   difficulty: Difficulty;
@@ -12,6 +15,9 @@ type Props = {
 };
 
 export const StreakChallenge = ({ difficulty, currency }: Props) => {
+
+  useInputFocusControl();
+
   const {
     streak,
     maxStreak,
@@ -66,24 +72,12 @@ export const StreakChallenge = ({ difficulty, currency }: Props) => {
         onCoinsChange={setCoins}
       />
 
-      <input
-        type="text"
-        inputMode="numeric"
-        pattern="[0-9]*"
-        className="border rounded px-3 py-2 w-full text-base sm:text-lg mt-3"
-        placeholder="合計金額を入力"
-        value={input}
-        onChange={(e) => setInput(e.target.value)}
-        onKeyDown={(e) => {
-          if (e.key === 'Enter') handleCheck();
-        }}
+      <AnswerInput
+        input={input}
+        onChange={setInput}
+        onSubmit={handleCheck}
       />
-      <button
-        onClick={handleCheck}
-        className="bg-green-600 text-white py-2 rounded w-full hover:bg-green-700 transition mt-2"
-      >
-        チェック
-      </button>
+
       <button
         onClick={() => {
           reset();

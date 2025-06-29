@@ -1,5 +1,5 @@
 import { DifficultyConfig } from '@/components/difficulty-selector';
-import { SUPPORTED_CURRENCIES, type Currency } from '@/components/coin-image-generator/constants';
+import { type Currency, SUPPORTED_CURRENCIES } from '@/components/coin-image-generator/constants';
 
 const timerKey = 'timerChallengeHighScore';
 const streakKey = 'streakChallengeHighScore';

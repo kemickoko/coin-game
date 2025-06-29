@@ -1,9 +1,12 @@
 import { useState } from 'react';
 import { useTimerChallenge } from '@/features/timer-challenge/hooks/useTimerChallenge';
+import { AnswerInput } from '@/components/ui/AnswerInput';
 import { checkAnswer } from '@/utils/checkAnswer';
 import { CoinDisplay } from '@/components/coin-image-generator/CoinDisplay';
+import { useInputFocusControl } from '@/hooks/useInputFocusControl';
 import { type Difficulty, DifficultyConfig } from '@/components/difficulty-selector';
 import { type Currency } from '@/components/coin-image-generator/constants';
+
 
 
 type Props = {
@@ -12,6 +15,9 @@ type Props = {
 };
 
 export const TimerChallenge = ({ difficulty, currency }: Props) => {
+
+  useInputFocusControl();
+
   const {
     isPlaying,
     timeLeft,
@@ -87,29 +93,12 @@ export const TimerChallenge = ({ difficulty, currency }: Props) => {
            regenerateTrigger={regenerateKey}
           />
 
-          <input
-            type="text"
-            inputMode="numeric"
-            pattern="[0-9]*"
-            className="border rounded px-3 py-2 w-full text-base sm:text-lg mt-3"
-            placeholder="合計金額を入力"
-            value={input}
-            onChange={(e) => setInput(e.target.value.replace(/[^0-9]/g, ''))}
-            onKeyDown={(e) => {
-              if (e.key === 'Enter') {
-                e.preventDefault();
-                handleCheck();
-              }
-            }}
-            autoFocus
+          <AnswerInput
+            input={input}
+            onChange={setInput}
+            onSubmit={handleCheck}
           />
 
-          <button
-            onClick={handleCheck}
-            className="bg-green-600 text-white py-2 rounded w-full hover:bg-green-700 transition mt-2"
-          >
-            チェック
-          </button>
           <button
             onClick={() => {
               stop();
