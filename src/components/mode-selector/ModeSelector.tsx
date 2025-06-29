@@ -1,5 +1,5 @@
 import React from 'react';
-import type { ModeSelectorProps } from '@/components/ModeSelector/modeConfig';
+import type { ModeSelectorProps } from '@/components/mode-selector/modeConfig';
 import { selectedClassMap, unselectedClassMap } from '@/styles/colorClasses';
 
 export const ModeSelector: React.FC<ModeSelectorProps> = ({

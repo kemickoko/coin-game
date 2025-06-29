@@ -1,54 +1,44 @@
-import { useState } from 'react';
+import { Routes, Route } from 'react-router-dom';
 import { Home } from '@/pages/Home';
-import { NormalMode } from '@/features/normalMode/components/NormalMode';
-import { TimerChallenge } from './features/timerChallenge';
-import { StreakChallenge } from './features/streakChallenge';
-import { type Difficulty } from '@/components/DifficultySelector';
-import { type ChallengeMode } from '@/components/ModeSelector';
-
+import { HighScorePage } from '@/pages/HighScorePage';
+import { PlayScreen } from '@/pages/PlayScreen';
+import { useState } from 'react';
+import { type Difficulty } from '@/components/difficulty-selector';
+import { type ChallengeMode } from '@/components/mode-selector';
+import { SUPPORTED_CURRENCIES, type Currency } from '@/components/coin-image-generator/constants';
 
 export const App = () => {
-  const [difficulty, setDifficulty] = useState<Difficulty>('normal');
-  const [mode, setMode] = useState<ChallengeMode>('normal');
-  const [started, setStarted] = useState(false);
-
-  const handleStart = () => {
-      if (mode) {
-        setStarted(true);
-      }
-    };
-
-    const handleBackToHome = () => {
-      setStarted(false);
-    };
-
-    if (!started) {
-      return (
-        <Home
-          difficulty={difficulty}
-          mode={mode}
-          onDifficultyChange={setDifficulty}
-          onModeChange={setMode}
-          onStart={handleStart}
-        />
-      );
-    }
+  const [difficulty, setDifficulty] = useState<Difficulty>(() => 'normal');
+  const [mode, setMode] = useState<ChallengeMode>(() => 'normal');
+  const [currency, setCurrency] = useState<Currency>(SUPPORTED_CURRENCIES[0].code);
 
   return (
-    <div className="min-h-screen max-w-xl mx-auto p-4 text-center flex flex-col">
-      <button
-        onClick={handleBackToHome}
-        className="mb-4 px-3 py-1 rounded border bg-gray-200 hover:bg-gray-300 self-start"
-      >
-        ← モード選択に戻る
-      </button>
-
-      {/* モードごとの表示切り替え */}
-      <div className="flex-grow">
-        {mode === 'normal' && <NormalMode difficulty={difficulty} />}
-        {mode === 'timer' && <TimerChallenge difficulty={difficulty} />}
-        {mode === 'streak' && <StreakChallenge difficulty={difficulty} />}
-      </div>
-    </div>
+    <Routes>
+      <Route
+        path="/"
+        element={
+          <Home
+            difficulty={difficulty}
+            mode={mode}
+            currency={currency}
+            onDifficultyChange={setDifficulty}
+            onModeChange={setMode}
+            onStart={() => {}}
+            onCurrencyChange={setCurrency}
+          />
+        }
+      />
+      <Route path="/highscores" element={<HighScorePage />} />
+      <Route
+        path="/play"
+        element={
+          <PlayScreen
+            difficulty={difficulty}
+            mode={mode}
+            currency={currency}
+          />
+        }
+      />
+    </Routes>
   );
 };

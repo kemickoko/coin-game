@@ -1,15 +1,17 @@
 import { useState } from 'react';
-import { useTimerChallenge } from '@/features/timerChallenge/hooks/useTimerChallenge';
+import { useTimerChallenge } from '@/features/timer-challenge/hooks/useTimerChallenge';
 import { checkAnswer } from '@/utils/checkAnswer';
-import { CoinArea } from '@/components/CoinArea';
-import { COIN_TYPES } from '@/constants/coins';
-import { type Difficulty, DifficultyConfig } from '@/components/DifficultySelector';
+import { CoinDisplay } from '@/components/coin-image-generator/CoinDisplay';
+import { type Difficulty, DifficultyConfig } from '@/components/difficulty-selector';
+import { type Currency } from '@/components/coin-image-generator/constants';
+
 
 type Props = {
   difficulty: Difficulty;
+  currency: Currency;
 };
 
-export const TimerChallenge = ({ difficulty }: Props) => {
+export const TimerChallenge = ({ difficulty, currency }: Props) => {
   const {
     isPlaying,
     timeLeft,
@@ -17,18 +19,22 @@ export const TimerChallenge = ({ difficulty }: Props) => {
     highScore,
     timerHistory,
     coins,
-    regenerateCoins,
+    setCoins,
     start,
     stop,
     incrementCorrect,
-  } = useTimerChallenge(difficulty);
+  } = useTimerChallenge(difficulty, currency);
 
-  const total = coins.reduce((sum, coin) => sum + COIN_TYPES[coin.type].value, 0);
   const [input, setInput] = useState('');
   const [result, setResult] = useState<string | null>(null);
   const [mistakeCount, setMistakeCount] = useState(0);
+  const [regenerateKey, setRegenerateKey] = useState(0);
+
+  const total = coins.reduce((sum, coin) => sum + coin.value, 0);
 
   const handleCheck = () => {
+    if (!isPlaying) return;
+
     const res = checkAnswer(input, total, mistakeCount, true);
     setResult(res.message);
 
@@ -37,7 +43,7 @@ export const TimerChallenge = ({ difficulty }: Props) => {
         incrementCorrect();
         setInput('');
         setMistakeCount(0);
-        regenerateCoins();
+        setRegenerateKey((prev) => prev + 1);
         break;
       case 'wrong':
         if (typeof res.newMistakeCount === 'number') {
@@ -53,12 +59,15 @@ export const TimerChallenge = ({ difficulty }: Props) => {
   };
 
   return (
-    <div className="text-center mt-8">
-      <h2 className="text-xl font-bold mb-2">3分チャレンジ</h2>
+    <div className="text-center mt-8 max-w-xl mx-auto p-4">
+      <h2 className="text-xl font-bold mb-4">3分チャレンジ</h2>
 
       {!isPlaying ? (
         <button
-          onClick={start}
+          onClick={() => {
+            setRegenerateKey((prev) => prev + 1);
+            start();
+          }}
           className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
         >
           スタート
@@ -67,9 +76,16 @@ export const TimerChallenge = ({ difficulty }: Props) => {
         <>
           <p className="text-lg font-medium mb-2">残り時間: {timeLeft} 秒</p>
           <p className="mb-2">正解数: {correctCount} 問</p>
-          <p className="mb-4">🏆 "{DifficultyConfig[difficulty].label}" の最高記録: {highScore} 問</p>
+          <p className="mb-4">
+            🏆 "{DifficultyConfig[difficulty].label}" の{currency} での最高記録: {highScore} 問
+          </p>
 
-          <CoinArea coins={coins} />
+          <CoinDisplay
+           difficulty={difficulty}
+           currency={currency}
+           onCoinsChange={(newCoins) => setCoins(newCoins)}
+           regenerateTrigger={regenerateKey}
+          />
 
           <input
             type="text"
@@ -78,11 +94,16 @@ export const TimerChallenge = ({ difficulty }: Props) => {
             className="border rounded px-3 py-2 w-full text-base sm:text-lg mt-3"
             placeholder="合計金額を入力"
             value={input}
-            onChange={(e) => setInput(e.target.value)}
+            onChange={(e) => setInput(e.target.value.replace(/[^0-9]/g, ''))}
             onKeyDown={(e) => {
-              if (e.key === 'Enter') handleCheck();
+              if (e.key === 'Enter') {
+                e.preventDefault();
+                handleCheck();
+              }
             }}
+            autoFocus
           />
+
           <button
             onClick={handleCheck}
             className="bg-green-600 text-white py-2 rounded w-full hover:bg-green-700 transition mt-2"

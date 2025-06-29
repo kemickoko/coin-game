@@ -1,4 +1,4 @@
-import { type Difficulty, DifficultyConfig } from '@/components/DifficultySelector';
+import { type Difficulty, DifficultyConfig } from '@/components/difficulty-selector';
 
 type Props = {
   difficulty: Difficulty;
