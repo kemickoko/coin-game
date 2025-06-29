@@ -1,14 +1,17 @@
 import { useState } from 'react';
-import { useTimerChallenge } from '@/features/timerChallenge/hooks/useTimerChallenge';
+import { useTimerChallenge } from '@/features/timer-challenge/hooks/useTimerChallenge';
 import { checkAnswer } from '@/utils/checkAnswer';
-import { CoinDisplay } from '@/components/CoinImageGenerator/CoinDisplay';
-import { type Difficulty, DifficultyConfig } from '@/components/DifficultySelector';
+import { CoinDisplay } from '@/components/coin-image-generator/CoinDisplay';
+import { type Difficulty, DifficultyConfig } from '@/components/difficulty-selector';
+import { type Currency } from '@/components/coin-image-generator/constants';
+
 
 type Props = {
   difficulty: Difficulty;
+  currency: Currency;
 };
 
-export const TimerChallenge = ({ difficulty }: Props) => {
+export const TimerChallenge = ({ difficulty, currency }: Props) => {
   const {
     isPlaying,
     timeLeft,
@@ -20,7 +23,7 @@ export const TimerChallenge = ({ difficulty }: Props) => {
     start,
     stop,
     incrementCorrect,
-  } = useTimerChallenge(difficulty);
+  } = useTimerChallenge(difficulty, currency);
 
   const [input, setInput] = useState('');
   const [result, setResult] = useState<string | null>(null);
@@ -30,7 +33,7 @@ export const TimerChallenge = ({ difficulty }: Props) => {
   const total = coins.reduce((sum, coin) => sum + coin.value, 0);
 
   const handleCheck = () => {
-    if (!isPlaying) return; // タイマーが動いてないなら無効
+    if (!isPlaying) return;
 
     const res = checkAnswer(input, total, mistakeCount, true);
     setResult(res.message);
@@ -74,11 +77,12 @@ export const TimerChallenge = ({ difficulty }: Props) => {
           <p className="text-lg font-medium mb-2">残り時間: {timeLeft} 秒</p>
           <p className="mb-2">正解数: {correctCount} 問</p>
           <p className="mb-4">
-            🏆 "{DifficultyConfig[difficulty].label}" の最高記録: {highScore} 問
+            🏆 "{DifficultyConfig[difficulty].label}" の{currency} での最高記録: {highScore} 問
           </p>
 
           <CoinDisplay
-           difficulty={difficulty} 
+           difficulty={difficulty}
+           currency={currency}
            onCoinsChange={(newCoins) => setCoins(newCoins)}
            regenerateTrigger={regenerateKey}
           />

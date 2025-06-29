@@ -3,12 +3,14 @@ import { Home } from '@/pages/Home';
 import { HighScorePage } from '@/pages/HighScorePage';
 import { PlayScreen } from '@/pages/PlayScreen';
 import { useState } from 'react';
-import { type Difficulty } from '@/components/DifficultySelector';
-import { type ChallengeMode } from '@/components/ModeSelector';
+import { type Difficulty } from '@/components/difficulty-selector';
+import { type ChallengeMode } from '@/components/mode-selector';
+import { SUPPORTED_CURRENCIES, type Currency } from '@/components/coin-image-generator/constants';
 
 export const App = () => {
-  const [difficulty, setDifficulty] = useState<Difficulty>('normal');
-  const [mode, setMode] = useState<ChallengeMode>('normal');
+  const [difficulty, setDifficulty] = useState<Difficulty>(() => 'normal');
+  const [mode, setMode] = useState<ChallengeMode>(() => 'normal');
+  const [currency, setCurrency] = useState<Currency>(SUPPORTED_CURRENCIES[0].code);
 
   return (
     <Routes>
@@ -18,9 +20,11 @@ export const App = () => {
           <Home
             difficulty={difficulty}
             mode={mode}
+            currency={currency}
             onDifficultyChange={setDifficulty}
             onModeChange={setMode}
             onStart={() => {}}
+            onCurrencyChange={setCurrency}
           />
         }
       />
@@ -31,6 +35,7 @@ export const App = () => {
           <PlayScreen
             difficulty={difficulty}
             mode={mode}
+            currency={currency}
           />
         }
       />

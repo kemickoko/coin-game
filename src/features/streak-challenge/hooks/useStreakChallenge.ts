@@ -1,14 +1,14 @@
 import { useState } from 'react';
 import { randomInt } from '@/utils/randomInt';
-import { generateCoins } from '@/components/CoinImageGenerator/generateCoins';
-import { type Difficulty, DifficultyConfig } from '@/components/DifficultySelector';
+import { generateCoins } from '@/components/coin-image-generator/generateCoins';
+import { type Difficulty, DifficultyConfig } from '@/components/difficulty-selector';
 import { useHistoryStorage } from '@/hooks/useHistoryStorage';
+import { type Currency } from '@/components/coin-image-generator/constants';
 
 
-
-export const useStreakChallenge = (difficulty: Difficulty) => {
-  const historyKey = `streakHistory-${difficulty}`;
-  const maxKey = `streakHighScore-${difficulty}`;
+export const useStreakChallenge = (difficulty: Difficulty, currencyCode: Currency) => {
+  const historyKey = `streakChallengeHistory-${difficulty}-${currencyCode}`;
+  const maxKey = `streakChallengeHighScore-${difficulty}-${currencyCode}`;
 
   const {
     history: streakHistory,

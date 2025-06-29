@@ -1,42 +1,11 @@
 import type { Coin } from './types';
-import { JPY_COIN_TYPES, JPY_COIN_TYPES_KEYS, getJpyCoinSizePx } from '@/components/CoinImageGenerator/constants';
+import { currencyMap } from '@/components/coin-image-generator/constants';
+import { type Currency } from '@/components/coin-image-generator/constants';
 // 将来的に他通貨をここにimport
 
-export type Currency = 'JPY'; // 他通貨追加可能
 
-type CoinTypesMap = {
-  JPY: typeof JPY_COIN_TYPES,
-  // USD: typeof USD_COIN_TYPES,
-};
-
-type CoinKeysMap = {
-  JPY: typeof JPY_COIN_TYPES_KEYS,
-  // USD: typeof USD_COIN_TYPES_KEYS,
-};
-
-type GetSizeFuncMap = {
-  JPY: typeof getJpyCoinSizePx,
-  // USD: typeof getUsdCoinSizePx,
-};
-
-export function generateCoins(
-  count: number,
-  currency: Currency = 'JPY',
-): Coin[] {
-  // 通貨ごとの定義を取得
-  const coinTypesMap: CoinTypesMap = {
-    JPY: JPY_COIN_TYPES,
-  };
-  const coinKeysMap: CoinKeysMap = {
-    JPY: JPY_COIN_TYPES_KEYS,
-  };
-  const getSizeFuncMap: GetSizeFuncMap = {
-    JPY: getJpyCoinSizePx,
-  };
-
-  const coinTypes = coinTypesMap[currency];
-  const coinKeys = coinKeysMap[currency];
-  const getSizePx = getSizeFuncMap[currency];
+export function generateCoins(count: number, currency: Currency = 'JPY'): Coin[] {
+  const { coinTypes, coinKeys, getSizePx } = currencyMap[currency];
 
   const newCoins: Coin[] = [];
   const placed: { x: number; y: number }[] = [];

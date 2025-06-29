@@ -1,12 +1,14 @@
 import { useEffect, useState, useCallback, useRef } from 'react';
 import { randomInt } from '@/utils/randomInt';
-import { generateCoins } from '@/components/CoinImageGenerator/generateCoins';
-import { type Difficulty, DifficultyConfig } from '@/components/DifficultySelector';
+import { generateCoins } from '@/components/coin-image-generator/generateCoins';
+import { type Difficulty, DifficultyConfig } from '@/components/difficulty-selector';
 import { useHistoryStorage } from '@/hooks/useHistoryStorage';
+import { type Currency } from '@/components/coin-image-generator/constants';
 
-export const useTimerChallenge = (difficulty: Difficulty) => {
-  const historyKey = `timerChallengeHistory-${difficulty}`;
-  const highScoreKey = `timerChallengeHighScore-${difficulty}`;
+
+export const useTimerChallenge = (difficulty: Difficulty, currencyCode: Currency) => {
+  const historyKey = `timerChallengeHistory-${difficulty}-${currencyCode}`;
+  const highScoreKey = `timerChallengeHighScore-${difficulty}-${currencyCode}`;
 
   const {
     history: timerHistory,
@@ -33,7 +35,6 @@ export const useTimerChallenge = (difficulty: Difficulty) => {
   const [timeLeft, setTimeLeft] = useState(180);
   const [correctCount, setCorrectCount] = useState(0);
 
-  // 最新のcorrectCountを参照するためのrefを用意
   const correctCountRef = useRef(correctCount);
   useEffect(() => {
     correctCountRef.current = correctCount;
@@ -56,7 +57,6 @@ export const useTimerChallenge = (difficulty: Difficulty) => {
     regenerateCoins();
   }, [regenerateCoins]);
 
-  // stopはcorrectCountをrefから取得
   const stop = useCallback(() => {
     setIsPlaying(false);
     const currentCount = correctCountRef.current;

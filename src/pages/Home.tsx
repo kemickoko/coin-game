@@ -1,21 +1,27 @@
-import { DifficultySelector, type Difficulty } from '@/components/DifficultySelector';
-import { ModeSelector } from '@/components/ModeSelector';
-import { MODE_CONFIG, type ChallengeMode } from '@/components/ModeSelector';
+import { DifficultySelector, type Difficulty } from '@/components/difficulty-selector';
+import { ModeSelector } from '@/components/mode-selector';
+import { MODE_CONFIG, type ChallengeMode } from '@/components/mode-selector';
 import { useNavigate, Link } from 'react-router-dom';
+import { CurrencySelector } from '@/components/currency-selector/CurrencySelector';
+import { type Currency } from '@/components/coin-image-generator/constants';
 
 type Props = {
   difficulty: Difficulty;
   mode?: ChallengeMode;
+  currency: Currency;
   onDifficultyChange: (d: Difficulty) => void;
   onModeChange: (m: ChallengeMode) => void;
+  onCurrencyChange: (c: Currency) => void;
   onStart: () => void;
 };
 
 export const Home: React.FC<Props> = ({
   difficulty,
   mode,
+  currency,
   onDifficultyChange,
   onModeChange,
+  onCurrencyChange,
 }) => {
   const navigate = useNavigate();
 
@@ -28,6 +34,9 @@ export const Home: React.FC<Props> = ({
   return (
     <div className="max-w-xl mx-auto p-4 text-center">
       <h1 className="text-3xl font-bold mb-8">硬貨の合計金額を当てよう！</h1>
+
+      <h2 className="text-xl mb-2">通貨を選択してください</h2>
+      <CurrencySelector value={currency} onChange={onCurrencyChange} />
 
       <h2 className="text-xl mb-2">難易度を選択してください</h2>
       <DifficultySelector difficulty={difficulty} onSelect={onDifficultyChange} />

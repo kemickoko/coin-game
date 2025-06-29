@@ -1,19 +1,21 @@
 import { useState } from 'react';
-import { CoinDisplay } from '@/components/CoinImageGenerator/CoinDisplay';
-import type { Coin } from '@/components/CoinImageGenerator/types';
-import { type Difficulty } from '@/components/DifficultySelector';
+import { CoinDisplay } from '@/components/coin-image-generator/CoinDisplay';
+import type { Coin } from '@/components/coin-image-generator/types';
+import { type Difficulty } from '@/components/difficulty-selector';
 import { checkAnswer } from '@/utils/checkAnswer';
+import { type Currency } from '@/components/coin-image-generator/constants';
 
 type Props = {
   difficulty: Difficulty;
+  currency: Currency;
 };
 
-export const NormalMode = ({ difficulty }: Props) => {
+export const NormalMode = ({ difficulty, currency }: Props) => {
   const [coins, setCoins] = useState<Coin[]>([]);
   const [input, setInput] = useState('');
   const [result, setResult] = useState<string | null>(null);
   const [mistakeCount, setMistakeCount] = useState(0);
-  const [coinKey, setCoinKey] = useState(0); // コイン再生成用
+  const [coinKey, setCoinKey] = useState(0);
 
   // 合計金額を計算
   const total = coins.reduce((sum, coin) => sum + coin.value, 0);
@@ -43,7 +45,7 @@ export const NormalMode = ({ difficulty }: Props) => {
     setInput('');
     setResult(null);
     setMistakeCount(0);
-    setCoinKey((prev) => prev + 1); // CoinDisplay を再レンダリングしコイン再生成
+    setCoinKey((prev) => prev + 1);
   };
 
   return (
@@ -54,8 +56,9 @@ export const NormalMode = ({ difficulty }: Props) => {
 
       {/* コイン表示 */}
       <CoinDisplay
-        key={coinKey} // 強制再レンダリング用
+        key={coinKey}
         difficulty={difficulty}
+        currency={currency}
         onCoinsChange={setCoins}
       />
 

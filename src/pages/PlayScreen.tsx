@@ -1,16 +1,18 @@
 import { useNavigate } from 'react-router-dom';
-import { TimerChallenge } from '@/features/timerChallenge';
-import { StreakChallenge } from '@/features/streakChallenge';
-import { NormalMode } from '@/features/normalMode/components/NormalMode';
-import { type Difficulty } from '@/components/DifficultySelector';
-import { type ChallengeMode } from '@/components/ModeSelector';
+import { TimerChallenge } from '@/features/timer-challenge';
+import { StreakChallenge } from '@/features/streak-challenge';
+import { NormalMode } from '@/features/normal-mode/components/NormalMode';
+import { type Difficulty } from '@/components/difficulty-selector';
+import { type ChallengeMode } from '@/components/mode-selector';
+import { type Currency } from '@/components/coin-image-generator/constants';
 
 type Props = {
   difficulty: Difficulty;
   mode: ChallengeMode;
+  currency: Currency;
 };
 
-export const PlayScreen: React.FC<Props> = ({ difficulty, mode }) => {
+export const PlayScreen: React.FC<Props> = ({ difficulty, mode, currency }) => {
   const navigate = useNavigate();
 
   return (
@@ -23,9 +25,9 @@ export const PlayScreen: React.FC<Props> = ({ difficulty, mode }) => {
       </button>
 
       <div className="flex-grow">
-        {mode === 'normal' && <NormalMode difficulty={difficulty} />}
-        {mode === 'timer' && <TimerChallenge difficulty={difficulty} />}
-        {mode === 'streak' && <StreakChallenge difficulty={difficulty} />}
+        {mode === 'normal' && <NormalMode difficulty={difficulty} currency={currency} />}
+        {mode === 'timer' && <TimerChallenge difficulty={difficulty} currency={currency} />}
+        {mode === 'streak' && <StreakChallenge difficulty={difficulty} currency={currency} />}
       </div>
     </div>
   );

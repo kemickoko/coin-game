@@ -1,22 +1,24 @@
 import { useState } from 'react';
-import { useStreakChallenge } from '@/features/streakChallenge/hooks/useStreakChallenge';
-import { CoinDisplay } from '@/components/CoinImageGenerator/CoinDisplay';
-import { type Coin } from '@/components/CoinImageGenerator/types';
-import { type Difficulty, DifficultyConfig } from '@/components/DifficultySelector';
+import { useStreakChallenge } from '@/features/streak-challenge/hooks/useStreakChallenge';
+import { CoinDisplay } from '@/components/coin-image-generator/CoinDisplay';
+import { type Coin } from '@/components/coin-image-generator/types';
+import { type Difficulty, DifficultyConfig } from '@/components/difficulty-selector';
 import { checkAnswer } from '@/utils/checkAnswer';
+import { type Currency } from '@/components/coin-image-generator/constants';
 
 type Props = {
   difficulty: Difficulty;
+  currency: Currency;
 };
 
-export const StreakChallenge = ({ difficulty }: Props) => {
+export const StreakChallenge = ({ difficulty, currency }: Props) => {
   const {
     streak,
     maxStreak,
     reset,
     incrementStreak,
     streakHistory,
-  } = useStreakChallenge(difficulty);
+  } = useStreakChallenge(difficulty, currency);
 
   const [input, setInput] = useState('');
   const [result, setResult] = useState<string | null>(null);
@@ -55,11 +57,12 @@ export const StreakChallenge = ({ difficulty }: Props) => {
     <div className="text-center mt-8">
       <h2 className="text-xl font-bold mb-2">連続正解チャレンジ</h2>
       <p className="mb-1">現在の連続正解数: {streak}</p>
-      <p className="mb-4">🏆 "{DifficultyConfig[difficulty].label}" の最高記録: {maxStreak} 問</p>
+      <p className="mb-4">🏆 "{DifficultyConfig[difficulty].label}" の{currency} での最高記録: {maxStreak} 問</p>
 
       <CoinDisplay
         key={coinDisplayKey}
         difficulty={difficulty}
+        currency={currency}
         onCoinsChange={setCoins}
       />
 
