@@ -1,33 +1,22 @@
-import { useState, useEffect } from 'react';
-import { COIN_TYPES } from '@/components/CoinImageGenerator/constants/japaneseCoins';
-import { DifficultyConfig, type Difficulty } from '@/components/DifficultySelector';
-import { generateCoins } from '@/components/CoinImageGenerator/generateCoins';
+import { useState } from 'react';
+import { CoinDisplay } from '@/components/CoinImageGenerator/CoinDisplay';
+import type { Coin } from '@/components/CoinImageGenerator/types';
+import { type Difficulty } from '@/components/DifficultySelector';
 import { checkAnswer } from '@/utils/checkAnswer';
-import { CoinArea } from '@/components/CoinImageGenerator/CoinArea';
-import { randomInt } from '@/utils/randomInt';
 
 type Props = {
   difficulty: Difficulty;
 };
 
 export const NormalMode = ({ difficulty }: Props) => {
-  const [coins, setCoins] = useState(() => {
-    const [min, max] = DifficultyConfig[difficulty].range;
-    return generateCoins(randomInt(min, max));
-  });
+  const [coins, setCoins] = useState<Coin[]>([]);
   const [input, setInput] = useState('');
   const [result, setResult] = useState<string | null>(null);
   const [mistakeCount, setMistakeCount] = useState(0);
+  const [coinKey, setCoinKey] = useState(0); // コイン再生成用
 
-  const total = coins.reduce((sum, coin) => sum + COIN_TYPES[coin.type].value, 0);
-
-  const regenerateCoins = () => {
-    const [min, max] = DifficultyConfig[difficulty].range;
-    setCoins(generateCoins(randomInt(min, max)));
-    setInput('');
-    setResult(null);
-    setMistakeCount(0);
-  };
+  // 合計金額を計算
+  const total = coins.reduce((sum, coin) => sum + coin.value, 0);
 
   const handleCheck = () => {
     const res = checkAnswer(input, total, mistakeCount, true);
@@ -50,16 +39,25 @@ export const NormalMode = ({ difficulty }: Props) => {
     }
   };
 
-  useEffect(() => {
-    regenerateCoins();
-  }, [difficulty]);
+  const regenerateCoins = () => {
+    setInput('');
+    setResult(null);
+    setMistakeCount(0);
+    setCoinKey((prev) => prev + 1); // CoinDisplay を再レンダリングしコイン再生成
+  };
 
   return (
     <div className="max-w-xl mx-auto p-4">
-      <h1 className="text-2xl font-bold text-center mb-4">硬貨の合計金額を当てよう！（通常モード）</h1>
+      <h1 className="text-2xl font-bold text-center mb-4">
+        硬貨の合計金額を当てよう！（通常モード）
+      </h1>
 
       {/* コイン表示 */}
-      <CoinArea coins={coins} />
+      <CoinDisplay
+        key={coinKey} // 強制再レンダリング用
+        difficulty={difficulty}
+        onCoinsChange={setCoins}
+      />
 
       {/* 入力とチェック */}
       <input

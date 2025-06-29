@@ -1,9 +1,8 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback, useRef } from 'react';
 import { randomInt } from '@/utils/randomInt';
 import { generateCoins } from '@/components/CoinImageGenerator/generateCoins';
 import { type Difficulty, DifficultyConfig } from '@/components/DifficultySelector';
 import { useHistoryStorage } from '@/hooks/useHistoryStorage';
-
 
 export const useTimerChallenge = (difficulty: Difficulty) => {
   const historyKey = `timerChallengeHistory-${difficulty}`;
@@ -21,6 +20,12 @@ export const useTimerChallenge = (difficulty: Difficulty) => {
   });
 
   useEffect(() => {
+    if (localMax > highScore) {
+      setHighScore(localMax);
+    }
+  }, [localMax, highScore]);
+
+  useEffect(() => {
     localStorage.setItem(highScoreKey, String(highScore));
   }, [highScore]);
 
@@ -28,32 +33,40 @@ export const useTimerChallenge = (difficulty: Difficulty) => {
   const [timeLeft, setTimeLeft] = useState(180);
   const [correctCount, setCorrectCount] = useState(0);
 
+  // 最新のcorrectCountを参照するためのrefを用意
+  const correctCountRef = useRef(correctCount);
+  useEffect(() => {
+    correctCountRef.current = correctCount;
+  }, [correctCount]);
+
   const [coins, setCoins] = useState(() => {
     const [min, max] = DifficultyConfig[difficulty].range;
     return generateCoins(randomInt(min, max));
   });
 
-  const regenerateCoins = () => {
+  const regenerateCoins = useCallback(() => {
     const [min, max] = DifficultyConfig[difficulty].range;
     setCoins(generateCoins(randomInt(min, max)));
-  };
+  }, [difficulty]);
 
-  const start = () => {
+  const start = useCallback(() => {
     setIsPlaying(true);
     setTimeLeft(180);
     setCorrectCount(0);
     regenerateCoins();
-  };
+  }, [regenerateCoins]);
 
-  const stop = () => {
+  // stopはcorrectCountをrefから取得
+  const stop = useCallback(() => {
     setIsPlaying(false);
-    if (correctCount > 0) {
-      addRecord(correctCount);
+    const currentCount = correctCountRef.current;
+    if (currentCount > 0) {
+      addRecord(currentCount);
     }
-    if (correctCount > highScore) {
-      setHighScore(correctCount);
+    if (currentCount > highScore) {
+      setHighScore(currentCount);
     }
-  };
+  }, [addRecord, highScore]);
 
   useEffect(() => {
     if (!isPlaying) return;
@@ -70,7 +83,7 @@ export const useTimerChallenge = (difficulty: Difficulty) => {
     }, 1000);
 
     return () => clearInterval(timer);
-  }, [isPlaying]);
+  }, [isPlaying, stop]);
 
   return {
     isPlaying,
@@ -79,6 +92,7 @@ export const useTimerChallenge = (difficulty: Difficulty) => {
     highScore,
     timerHistory,
     coins,
+    setCoins,
     regenerateCoins,
     start,
     stop,
